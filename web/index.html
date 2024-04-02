@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modbus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222; /* Iniciando no tema dark */
+            margin: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        section {
+            text-align: center;
+        }
+
+        .button {
+            width: 100px;
+            height: 100px;
+            font-size: 24px; /* Ajustando o tamanho da fonte dos ícones */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .button.active {
+            position: relative;
+        }
+
+        .button.active::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 3px solid #45a049; /* Cor da borda realçada */
+            border-radius: 50%;
+        }
+
+        #start {
+            background-color: #008CBA; /* Nova cor para o botão "Start" */
+        }
+
+        #stop {
+            background-color: #f44336; /* Nova cor para o botão "Stop" */
+        }
+
+        #restart {
+            background-color: #ff9800; /* Nova cor para o botão "Restart" */
+        }
+
+        .fas { /* Ajustando o peso do ícone */
+            font-weight: bold;
+        }
+
+        .theme-buttons {
+            margin-top: 20px;
+        }
+
+        .theme-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+
+        .active {
+            background-color: #45a049 !important; /* Realçando o botão ativo */
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <button id="start" class="button"><i class="fas fa-play"></i></button>
+        <button id="stop" class="button"><i class="fas fa-stop"></i></button>
+        <button id="restart" class="button"><i class="fas fa-redo-alt"></i></button>
+    </section>
+
+    <script>
+        document.getElementById("start").addEventListener("click", function(){
+            sendCommand("liga");
+        });
+
+        document.getElementById("stop").addEventListener("click", function(){
+            sendCommand("desliga");
+        });
+
+        document.getElementById("restart").addEventListener("click", function(){
+            sendCommand("restart");
+        });
+
+        function sendCommand(command) {
+            let commandObj = {};
+            switch (command) {
+                case "liga":
+                    commandObj = { "liga": 1, "desliga": 0, "restart": 0 };
+                    break;
+                case "desliga":
+                    commandObj = { "liga": 0, "desliga": 1, "restart": 0 };
+                    break;
+                case "restart":
+                    commandObj = { "liga": 0, "desliga": 0, "restart": 1 };
+                    break;
+                default:
+                    break;
+            }
+
+            // Envia o comando para o servidor
+            fetch('https://roboiot.onrender.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(commandObj)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log('Command sent successfully');
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+    </script>
+</body>
+</html>
