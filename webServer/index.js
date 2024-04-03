@@ -12,7 +12,7 @@ let restart = 0;
 
 app.use(cors());
 
-app.post("/", jsonParser, function (req, res) {
+app.post("/comando", jsonParser, function (req, res) {
   res.setHeader("Content-Type", "application/json");
 
   // Atualiza as variáveis com base nos valores recebidos no corpo da solicitação
@@ -27,7 +27,7 @@ app.post("/", jsonParser, function (req, res) {
   res.end();
 });
 
-app.get("/", function (req, res) {
+app.get("/statusChaves", function (req, res) {
   res.setHeader("Content-Type", "application/json");
 
   // Retorna o estado atual de todas as variáveis
