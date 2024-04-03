@@ -110,13 +110,13 @@
             let commandObj = {};
             switch (command) {
                 case "liga":
-                    commandObj = { "liga": 1, "desliga": 0, "restart": 0 };
+                    commandObj = { "liga": True, "desliga": False, "restart": False };
                     break;
                 case "desliga":
-                    commandObj = { "liga": 0, "desliga": 1, "restart": 0 };
+                    commandObj = { "liga": False, "desliga": True, "restart": False };
                     break;
                 case "restart":
-                    commandObj = { "liga": 0, "desliga": 0, "restart": 1 };
+                    commandObj = { "liga": False, "desliga": False, "restart": True };
                     break;
                 default:
                     break;
